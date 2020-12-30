@@ -23,9 +23,9 @@ async function main() {
 
   // Add the label to the cards
   console.log(cards.data);
-  cards.data.forEach(card => {
+  cards.data.forEach(async card => {
     try {
-      octokit.issues.addLabels({
+      await octokit.issues.addLabels({
         owner: repoOwner,
         repo: repo,
         issue_number: card.issue_number,
