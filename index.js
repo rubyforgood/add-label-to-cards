@@ -36,7 +36,7 @@ async function main() {
         owner: repoOwner,
         repo: repo,
         issue_number: issueNumber,
-        labels: labelToAdd
+        labels: [labelToAdd]
       });
     }
     catch (e) {
