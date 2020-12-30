@@ -22,7 +22,6 @@ async function main() {
   }
 
   // Add the label to the cards
-  console.log(cards.data);
   cards.data.forEach(async card => {
     const matches = card.content_url.match(/\/issues\/(\d+)/);
     if (!matches) {
