@@ -11,7 +11,7 @@ async function main() {
   // Get the cards from the given column
   var cards = null;
   try {
-    cards = await octokit.project.listCards({
+    cards = await octokit.projects.listCards({
       column_id: columnId,
       archived_state: 'not_archived'
     });
