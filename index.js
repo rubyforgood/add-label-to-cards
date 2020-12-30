@@ -23,6 +23,9 @@ async function main() {
 
   // Add the label to the cards
   cards.data.forEach(async card => {
+    if (!card.content_url) {
+      return true;
+    }
     const matches = card.content_url.match(/\/issues\/(\d+)/);
     if (!matches) {
       console.log(`Couldn't match the regexp against '${card.content_url}'.`);
@@ -45,4 +48,9 @@ async function main() {
   });
 }
 
-main();
+try {
+  await main();
+}
+catch (e) {
+  console.log(e.message);
+}
