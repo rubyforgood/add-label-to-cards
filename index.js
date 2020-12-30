@@ -49,7 +49,7 @@ async function main() {
 }
 
 try {
-  await main();
+  main();
 }
 catch (e) {
   console.log(e.message);
