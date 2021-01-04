@@ -13,7 +13,8 @@ async function main() {
   try {
     cards = await octokit.projects.listCards({
       column_id: columnId,
-      archived_state: 'not_archived'
+      archived_state: 'not_archived',
+      per_page: 100
     });
   }
   catch (e) {
