@@ -51,7 +51,6 @@ async function main() {
 
 try {
   main();
-}
-catch (e) {
-  console.log(e.message);
+} catch (e) {
+  console.error(e.message);
 }
