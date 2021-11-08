@@ -1,6 +1,12 @@
 # Add Label to Cards
 
-Adds the given label to all cards in the given column.
+Adds a label to all cards in a column of a project.
+
+## Parameters
+### label_to_add
+The text of the label to add
+### column_id
+The id of the column containing all the cards to label
 
 ## Example Usage
 ```
