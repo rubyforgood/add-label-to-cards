@@ -6,8 +6,7 @@ Adds the given label to all cards in the given column.
 ```
 on:
   schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron:  '0 * * * *'
+    - cron:  '0 * * * *' # Run every hour
 
 jobs:
   add_help_wanted_labels:
@@ -19,6 +18,6 @@ jobs:
         id: add-help-wanted-labels
         with:
           token: ${{secrets.GITHUB_TOKEN}}
-          label_to_add: 'Help Wanted'
-          column_id: '16739169'
+          label_to_add: 'LABEL TEXT'
+          column_id: '12345678' # Id of column to add labels
 ```
