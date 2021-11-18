@@ -14,6 +14,14 @@ const octokit = github.getOctokit(token)
 //  @throws   {RangeError} if columnId is negative
 //  @throws   {Error} if an error occurs while trying to fetch the card data
 async function getCards (columnId) {
+  if (typeof columnId === 'string') {
+    columnId = parseInt(columnId)
+
+    if (!columnId) { // realistically the column id isn't going to be 0
+      throw new TypeError('Param columnId is not an integer')
+    }
+  }
+
   if (!Number.isInteger(columnId)) {
     throw new TypeError('Param columnId is not an integer')
   } else if (columnId < 0) {
