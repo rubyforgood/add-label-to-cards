@@ -21,7 +21,6 @@ function isObject (variable) {
 //  @throws   {RangeError} if columnId is negative
 //  @throws   {Error} if an error occurs while trying to fetch the card data
 async function getCards (columnId) {
-  throw new Error('test')
   if (typeof columnId === 'string') {
     columnId = parseInt(columnId)
 
@@ -49,6 +48,7 @@ async function getCards (columnId) {
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {Error} if an error occurs while labeling the card
 async function labelCardIssue (card) {
+  throw new Error('test')
   if (!isObject(card)) {
     throw new TypeError('Param card is not an object')
   }
@@ -81,7 +81,7 @@ async function main () {
     cards = await getCards(columnId)
     console.log(JSON.stringify(cards))
   } catch (e) {
-    console.error("Could not fetch cards")
+    console.error("ERROR: Failed to fetch card data")
     console.error(e.message)
     process.exit(1)
   }
