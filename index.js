@@ -21,6 +21,7 @@ function isObject (variable) {
 //  @throws   {RangeError} if columnId is negative
 //  @throws   {Error} if an error occurs while trying to fetch the card data
 async function getCards (columnId) {
+  throw new Error('test')
   if (typeof columnId === 'string') {
     columnId = parseInt(columnId)
 
