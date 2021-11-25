@@ -48,7 +48,6 @@ async function getCards (columnId) {
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {Error} if an error occurs while labeling the card
 async function labelCardIssue (card) {
-  throw new Error('test')
   if (!isObject(card)) {
     throw new TypeError('Param card is not an object')
   }
