@@ -11,7 +11,7 @@ const octokit = github.getOctokit(token)
 //  @param    {any} variable The variable to check
 //  @returns  {boolean} true if variable is an object, false otherwise
 function isObject (variable) {
-  return typeof variable === 'object' && !Array.isArray(variable) && variable !== null 
+  return typeof variable === 'object' && !Array.isArray(variable) && variable !== null
 }
 
 // Lists cards for a column
@@ -53,34 +53,31 @@ async function labelCardIssue (card) {
   }
 
   if (!card.content_url) {
-    return true
+    console.log(`INFO: card with id: ${ card.id } is not an issue`)
+    return
   }
 
-  const matches = card.content_url.match(/\/issues\/(\d+)/)
-  if (!matches) {
-    console.log(`Couldn't match the regexp against '${card.content_url}'.`)
-    return true
+  const issueNumberMatchCapture = card.content_url.match(/\/issues\/(\d+)$/)
+
+  if (!issueNumberMatchCapture || issueNumberMatchCapture.length < 2) {
+    throw new Error(`Failed to extract issue number from url: ${card.content_url}`)
   }
 
-  const issueNumber = matches[1]
-  try {
-    await octokit.issues.addLabels({
-      owner: repoOwner,
-      repo: repo,
-      issue_number: issueNumber,
-      labels: [labelToAdd]
-    })
-  } catch (e) {
-    console.error(e.message)
-    return true
-  }
+  const issueNumber = issueNumberMatchCapture[1]
+
+  return octokit.issues.addLabels({
+    owner: repoOwner,
+    repo: repo,
+    issue_number: issueNumber,
+    labels: [labelToAdd]
+  })
 }
 
 async function main () {
   let cards
 
   try {
-    cards = await getCards(16739169)
+    cards = await getCards(columnId)
     console.log(JSON.stringify(cards))
   } catch (e) {
     console.error("Could not fetch cards")
@@ -89,8 +86,7 @@ async function main () {
   }
 
   // Add the label to the cards
-  //cards.data.forEach(async card => {
-  //})
+  cards.data.forEach(labelCardIssue)
 }
 
 try {
