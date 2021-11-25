@@ -87,7 +87,7 @@ async function main () {
   }
 
   // Add the label to the cards
-  cards.data.forEach((card) => {
+  cards.data.forEach(async (card) => {
     try {
       await labelCardIssue(card)
     } catch (e) {
