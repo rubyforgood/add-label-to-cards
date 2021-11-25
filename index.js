@@ -86,7 +86,14 @@ async function main () {
   }
 
   // Add the label to the cards
-  cards.data.forEach(labelCardIssue)
+  cards.data.forEach((card) => {
+    try {
+      labelCardIssue(card)
+    } catch (e) {
+      console.warn(`WARNING: Failed to label card with id: ${card.id}`)
+      console.warn(e.message)
+    }
+  })
 }
 
 try {
