@@ -2,7 +2,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const token = core.getInput('token')
 const labelToAdd = core.getInput('label_to_add')
-const columnId = core.getInput('column_idd')
+const columnId = core.getInput('column_id')
 const repoOwner = github.context.repo.owner
 const repo = github.context.repo.repo
 const octokit = github.getOctokit(token)
@@ -74,6 +74,14 @@ async function labelCardIssue (card) {
 }
 
 async function main () {
+  if (columnId === undefined) {
+    throw new ReferenceError(`Missing required arg column_id`)
+  }
+
+  if (labelToAdd === undefined) {
+    throw new ReferenceError(`Missing required arg label_to_add`)
+  }
+
   let cards
 
   try {
@@ -100,4 +108,5 @@ try {
   main()
 } catch (e) {
   console.error(e.message)
+  process.exit(1)
 }
