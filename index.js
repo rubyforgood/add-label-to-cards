@@ -104,9 +104,7 @@ async function main () {
   })
 }
 
-try {
-  main()
-} catch (e) {
+main().catch((e) => {
   console.error(e.message)
   process.exit(1)
-}
+})
