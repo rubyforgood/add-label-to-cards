@@ -74,12 +74,11 @@ async function labelCardIssue (card) {
 }
 
 async function main () {
-  console.log(columnId)
-  if (columnId === undefined) {
+  if (!columnId.length) {
     throw new ReferenceError(`Missing required arg column_id`)
   }
 
-  if (labelToAdd === undefined) {
+  if (!labelToAdd.length) {
     throw new ReferenceError(`Missing required arg label_to_add`)
   }
 
