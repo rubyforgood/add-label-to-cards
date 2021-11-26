@@ -74,6 +74,7 @@ async function labelCardIssue (card) {
 }
 
 async function main () {
+  console.log(columnId)
   if (columnId === undefined) {
     throw new ReferenceError(`Missing required arg column_id`)
   }
