@@ -97,8 +97,12 @@ async function main () {
 
   cards.data.forEach(async (card) => {
     try {
-      if (await labelCardIssue(card)) {
+      let x = await labelCardIssue(card)
+      if (x) {
         cardsLabeledCount++
+      } else {
+        console.log("X")
+        console.log(x)
       }
     } catch (e) {
       console.warn(`WARNING: Failed to label card with id: ${card.id}`)
