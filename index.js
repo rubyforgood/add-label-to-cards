@@ -54,7 +54,7 @@ async function labelCardIssue (card) {
 
   if (!card.content_url) {
     console.log(`INFO: card with id: ${ card.id } is not an issue`)
-    return
+    return false
   }
 
   const issueNumberMatchCapture = card.content_url.match(/\/issues\/(\d+)$/)
@@ -93,15 +93,20 @@ async function main () {
     process.exit(1)
   }
 
-  // Add the label to the cards
+  let cardsLabeledCount = 0
+
   cards.data.forEach(async (card) => {
     try {
-      await labelCardIssue(card)
+      if (await labelCardIssue(card)) {
+        cardsLabeledCount++
+      }
     } catch (e) {
       console.warn(`WARNING: Failed to label card with id: ${card.id}`)
       console.warn(e.message)
     }
   })
+
+  console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.data.length} cards`)
 }
 
 main().catch((e) => {
