@@ -16,7 +16,8 @@ function isObject (variable) {
 
 // Lists cards for a column
 //  @param    {integer} columnId The id of the column containing the cards
-//  @returns  {Promise} A promise representing fetching the list of cards
+//  @return   {Promise} A promise representing fetching the list of cards
+//    @fulfilled {Array} The card data as an array of objects
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if columnId is negative
 //  @throws   {Error} if an error occurs while trying to fetch the card data
@@ -44,7 +45,7 @@ async function getCards (columnId) {
 
 // Adds a label to a card if it is an issue
 //  @param    {object} card An object representing the card to be labeled
-//  @returns  {Promise} A promise representing the labeling of the card
+//  @return   {Promise} A promise representing the labeling of the card
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {Error} if an error occurs while labeling the card
 async function labelCardIssue (card) {
@@ -73,6 +74,35 @@ async function labelCardIssue (card) {
   })
 }
 
+// Adds a github labeld to each card of a list
+//  @param    {Array} cards The list of cards to be labeled
+//  @return   {Promise} A promise representing labeling the list of cards
+//    @fulfilled {integer} The number of cards successfully labeled
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError} if columnId is negative
+//  @throws   {Error} if an error occurs while trying to fetch the card data
+async function labelCards(cards) {
+  let cardLabelAttemptCount = 0
+  let cardsLabeledCount = 0
+
+  cards.data.forEach(async (card) => {
+    cardLabelAttemptCount++
+
+    try {
+      await labelCardIssue(card)
+      cardsLabeledCount++
+    } catch (e) {
+      console.warn(`WARNING: Failed to label card with id: ${card.id}`)
+      console.warn(e.message)
+    }
+
+    if (cardLabelAttemptCount === cards.length) {
+      return cardsLabeledCount
+    }
+  })
+
+}
+
 async function main () {
   if (!columnId.length) {
     throw new ReferenceError(`Missing required arg column_id`)
@@ -93,24 +123,7 @@ async function main () {
     process.exit(1)
   }
 
-  let cardsLabeledCount = 0
-
-  cards.data.forEach(async (card) => {
-    try {
-      let x = await labelCardIssue(card)
-      if (x) {
-        console.log("Excuse me?")
-        console.log(x)
-        cardsLabeledCount++
-      } else {
-        console.log("X")
-        console.log(x)
-      }
-    } catch (e) {
-      console.warn(`WARNING: Failed to label card with id: ${card.id}`)
-      console.warn(e.message)
-    }
-  })
+  const cardsLabeledCount = await labelCards(cards)
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.data.length} cards`)
 }
