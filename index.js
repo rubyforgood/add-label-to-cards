@@ -99,6 +99,8 @@ async function main () {
     try {
       let x = await labelCardIssue(card)
       if (x) {
+        console.log("Excuse me?")
+        console.log(x)
         cardsLabeledCount++
       } else {
         console.log("X")
