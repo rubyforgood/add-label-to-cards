@@ -81,26 +81,27 @@ async function labelCardIssue (card) {
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if columnId is negative
 //  @throws   {Error} if an error occurs while trying to fetch the card data
-async function labelCards(cards) {
-  let cardLabelAttemptCount = 0
-  let cardsLabeledCount = 0
+function labelCards(cards) {
+  return new Promise((resolve, reject) => {
+    let cardLabelAttemptCount = 0
+    let cardsLabeledCount = 0
 
-  cards.data.forEach(async (card) => {
-    cardLabelAttemptCount++
+    cards.data.forEach(async (card) => {
+      cardLabelAttemptCount++
 
-    try {
-      await labelCardIssue(card)
-      cardsLabeledCount++
-    } catch (e) {
-      console.warn(`WARNING: Failed to label card with id: ${card.id}`)
-      console.warn(e.message)
-    }
+      try {
+        await labelCardIssue(card)
+        cardsLabeledCount++
+      } catch (e) {
+        console.warn(`WARNING: Failed to label card with id: ${card.id}`)
+        console.warn(e.message)
+      }
 
-    if (cardLabelAttemptCount === cards.length) {
-      return cardsLabeledCount
-    }
+      if (cardLabelAttemptCount === cards.length) {
+        resolve(cardsLabeledCount)
+      }
+    })
   })
-
 }
 
 async function main () {
