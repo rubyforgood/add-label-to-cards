@@ -98,7 +98,10 @@ function labelCards(cards) {
       }
 
       if (cardLabelAttemptCount === cards.length - 1) {
+        console.log("resolved")
         resolve(cardsLabeledCount)
+      } else {
+        console.log("nope")
       }
     })
   })
