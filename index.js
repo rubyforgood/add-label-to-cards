@@ -101,7 +101,7 @@ function labelCards(cards) {
         console.log("resolved")
         resolve(cardsLabeledCount)
       } else {
-        console.log("nope")
+        console.log(`cardLabelAttemptCount: ${cardLabelAttemptCount} length: ${cards.length - 1}`)
       }
     })
   })
