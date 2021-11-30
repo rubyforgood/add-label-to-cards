@@ -75,18 +75,18 @@ async function labelCardIssue (card) {
 }
 
 // Adds a github labeld to each card of a list
-//  @param    {Array} cards The list of cards to be labeled
+//  @param    {Array} cardData The list of cards to be labeled
 //  @return   {Promise} A promise representing labeling the list of cards
 //    @fulfilled {integer} The number of cards successfully labeled
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if columnId is negative
 //  @throws   {Error} if an error occurs while trying to fetch the card data
-function labelCards(cards) {
+function labelCards(cardData) {
   return new Promise((resolve, reject) => {
     let cardLabelAttemptCount = 0
     let cardsLabeledCount = 0
 
-    cards.data.forEach(async (card) => {
+    cardData.forEach(async (card) => {
       cardLabelAttemptCount++
 
       try {
@@ -97,11 +97,11 @@ function labelCards(cards) {
         console.warn(e.message)
       }
 
-      if (cardLabelAttemptCount === cards.length - 1) {
+      if (cardLabelAttemptCount === cardData.length - 1) {
         console.log("resolved")
         resolve(cardsLabeledCount)
       } else {
-        console.log(`cardLabelAttemptCount: ${cardLabelAttemptCount} length: ${cards.length - 1}`)
+        console.log(`cardLabelAttemptCount: ${cardLabelAttemptCount} length: ${cardData.length - 1}`)
       }
     })
   })
@@ -127,7 +127,7 @@ async function main () {
     process.exit(1)
   }
 
-  const cardsLabeledCount = await labelCards(cards)
+  const cardsLabeledCount = await labelCards(cards.data)
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.data.length} cards`)
 }
