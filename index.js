@@ -97,7 +97,7 @@ function labelCards(cards) {
         console.warn(e.message)
       }
 
-      if (cardLabelAttemptCount === cards.length) {
+      if (cardLabelAttemptCount === cards.length - 1) {
         resolve(cardsLabeledCount)
       }
     })
