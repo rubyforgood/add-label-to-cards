@@ -87,21 +87,21 @@ function labelCards(cardData) {
     let cardsLabeledCount = 0
 
     cardData.forEach(async (card) => {
-      cardLabelAttemptCount++
-
       try {
         await labelCardIssue(card)
         cardsLabeledCount++
       } catch (e) {
         console.warn(`WARNING: Failed to label card with id: ${card.id}`)
         console.warn(e.message)
-      }
+      } finally {
+        cardLabelAttemptCount++
 
-      if (cardLabelAttemptCount === cardData.length - 1) {
-        console.log("resolved")
-        resolve(cardsLabeledCount)
-      } else {
-        console.log(`cardLabelAttemptCount: ${cardLabelAttemptCount} length: ${cardData.length - 1}`)
+        if (cardLabelAttemptCount === cardData.length) {
+          console.log("resolved")
+          resolve(cardsLabeledCount)
+        } else {
+          console.log(`cardLabelAttemptCount: ${cardLabelAttemptCount} length: ${cardData.length - 1}`)
+        }
       }
     })
   })
