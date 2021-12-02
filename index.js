@@ -18,10 +18,11 @@ function isObject (variable) {
 //  @param    {integer} columnId The id of the column containing the cards
 //  @param    {integer} pageNumber The page of up to 100 cards to retrieve
 //              default 1
-//  @return   {Promise} A promise representing fetching the list of cards
+//  @return   {Promise} A promise representing fetching the page of cards
 //    @fulfilled {Array} The card data as an array of objects
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if columnId is negative
+//  @throws   {RangeError} if pageNumber is less than 1
 //  @throws   {Error} if an error occurs while trying to fetch the card data
 async function getCardPage (columnId, pageNumber = 1) {
   if (typeof columnId === 'string') {
@@ -32,10 +33,24 @@ async function getCardPage (columnId, pageNumber = 1) {
     }
   }
 
+  if (typeof pageNumber === 'string') {
+    pageNumber = parseInt(pageNumber)
+
+    if (!pageNumber) { // The column id isn't going to be 0
+      throw new TypeError('Param pageNumber is not an integer')
+    }
+  }
+
   if (!Number.isInteger(columnId)) {
     throw new TypeError('Param columnId is not an integer')
   } else if (columnId < 0) {
     throw new RangeError('Param columnId cannot be negative')
+  }
+
+  if (!Number.isInteger(pageNumber)) {
+    throw new TypeError('Param pageNumber is not an integer')
+  } else if (pageNumber < 1) {
+    throw new RangeError('Param pageNumber cannot be less than 1')
   }
 
   return await octokit.projects.listCards({
@@ -120,7 +135,7 @@ async function main () {
   let cards
 
   try {
-    cards = await getCardPage(columnId)
+    cards = await getCardPage(columnId, 0)
     console.log(JSON.stringify(cards))
   } catch (e) {
     console.error("ERROR: Failed to fetch card data")
