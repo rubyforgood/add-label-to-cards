@@ -39,6 +39,7 @@ async function getCards (columnId) {
   return await octokit.projects.listCards({
     column_id: columnId,
     archived_state: 'not_archived',
+    page: 2,
     per_page: 100
   })
 }
@@ -118,7 +119,7 @@ async function main () {
 
   try {
     cards = await getCards(columnId)
-    console.log(JSON.stringify(cards.data))
+    console.log(JSON.stringify(cards))
   } catch (e) {
     console.error("ERROR: Failed to fetch card data")
     console.error(e.message)
