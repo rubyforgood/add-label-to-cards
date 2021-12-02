@@ -88,8 +88,9 @@ function labelCards(cardData) {
 
     cardData.forEach(async (card) => {
       try {
-        await labelCardIssue(card)
-        cardsLabeledCount++
+        if (await labelCardIssue(card)) {
+          cardsLabeledCount++
+        }
       } catch (e) {
         console.warn(`WARNING: Failed to label card with id: ${card.id}`)
         console.warn(e.message)
@@ -97,10 +98,7 @@ function labelCards(cardData) {
         cardLabelAttemptCount++
 
         if (cardLabelAttemptCount === cardData.length) {
-          console.log("resolved")
           resolve(cardsLabeledCount)
-        } else {
-          console.log(`cardLabelAttemptCount: ${cardLabelAttemptCount} length: ${cardData.length - 1}`)
         }
       }
     })
@@ -120,7 +118,7 @@ async function main () {
 
   try {
     cards = await getCards(columnId)
-    console.log(JSON.stringify(cards))
+    console.log(JSON.stringify(cards.data))
   } catch (e) {
     console.error("ERROR: Failed to fetch card data")
     console.error(e.message)
