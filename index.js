@@ -14,14 +14,16 @@ function isObject (variable) {
   return typeof variable === 'object' && !Array.isArray(variable) && variable !== null
 }
 
-// Lists cards for a column
+// Lists up to 100 cards from a column
 //  @param    {integer} columnId The id of the column containing the cards
+//  @param    {integer} pageNumber The page of up to 100 cards to retrieve
+//              default 1
 //  @return   {Promise} A promise representing fetching the list of cards
 //    @fulfilled {Array} The card data as an array of objects
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError} if columnId is negative
 //  @throws   {Error} if an error occurs while trying to fetch the card data
-async function getCards (columnId) {
+async function getCardPage (columnId, pageNumber = 1) {
   if (typeof columnId === 'string') {
     columnId = parseInt(columnId)
 
@@ -39,7 +41,7 @@ async function getCards (columnId) {
   return await octokit.projects.listCards({
     column_id: columnId,
     archived_state: 'not_archived',
-    page: 2,
+    page: pageNumber,
     per_page: 100
   })
 }
@@ -118,7 +120,7 @@ async function main () {
   let cards
 
   try {
-    cards = await getCards(columnId)
+    cards = await getCardPage(columnId)
     console.log(JSON.stringify(cards))
   } catch (e) {
     console.error("ERROR: Failed to fetch card data")
