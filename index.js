@@ -135,7 +135,7 @@ async function main () {
   let cards
 
   try {
-    cards = await getCardPage(columnId, 0)
+    cards = await getCardPage(columnId)
     console.log(JSON.stringify(cards))
   } catch (e) {
     console.error("ERROR: Failed to fetch card data")
