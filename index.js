@@ -7,6 +7,8 @@ const repoOwner = github.context.repo.owner
 const repo = github.context.repo.repo
 const octokit = github.getOctokit(token)
 
+const MAX_CARDS_PER_PAGE = 100
+
 // Determines if an object is an object
 //  @param    {any} variable The variable to check
 //  @returns  {boolean} true if variable is an object, false otherwise
@@ -14,9 +16,9 @@ function isObject (variable) {
   return typeof variable === 'object' && !Array.isArray(variable) && variable !== null
 }
 
-// Lists up to 100 cards from a column
+// Lists up to MAX_CARDS_PER_PAGE cards from a column
 //  @param    {integer} columnId The id of the column containing the cards
-//  @param    {integer} pageNumber The page of up to 100 cards to retrieve
+//  @param    {integer} pageNumber The page of up to MAX_CARDS_PER_PAGE cards to retrieve
 //              default 1
 //  @return   {Promise} A promise representing fetching the page of cards
 //    @fulfilled {Array} The card data as an array of objects
@@ -57,7 +59,7 @@ async function getCardPage (columnId, pageNumber = 1) {
     column_id: columnId,
     archived_state: 'not_archived',
     page: pageNumber,
-    per_page: 100
+    per_page: MAX_CARDS_PER_PAGE
   })
 }
 
