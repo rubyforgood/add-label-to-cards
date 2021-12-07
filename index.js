@@ -7,7 +7,7 @@ const repoOwner = github.context.repo.owner
 const repo = github.context.repo.repo
 const octokit = github.getOctokit(token)
 
-const MAX_CARDS_PER_PAGE = 100
+const MAX_CARDS_PER_PAGE = 1
 
 // Determines if an object is an object
 //  @param    {any} variable The variable to check
@@ -61,6 +61,40 @@ async function getCardPage (columnId, pageNumber = 1) {
     page: pageNumber,
     per_page: MAX_CARDS_PER_PAGE
   })
+}
+
+// Lists all the cards for a column that are issues
+//  @param    {integer} columnId The id of the column containing the cards
+//  @return   {Promise} A promise representing fetching of card data
+//    @fulfilled {Array} The card data as an array of objects
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError} if columnId is negative
+//  @throws   {Error} if an error occurs while trying to fetch the card data
+async function getColumnCardIssues (columnId) {
+  if (typeof columnId === 'string') {
+    columnId = parseInt(columnId)
+
+    if (!columnId) { // The column id isn't going to be 0
+      throw new TypeError('Param columnId is not an integer')
+    }
+  }
+
+  if (!Number.isInteger(columnId)) {
+    throw new TypeError('Param columnId is not an integer')
+  } else if (columnId < 0) {
+    throw new RangeError('Param columnId cannot be negative')
+  }
+
+  let cardIssues = []
+  let cardPage
+  let page = 1
+
+  while ((cardPage=getCardPage(columnId, page)) === MAX_CARDS_PER_PAGE) {
+    console.log(cardPage)
+    page++
+  }
+
+  return cardIssues
 }
 
 // Adds a label to a card if it is an issue
@@ -136,6 +170,7 @@ async function main () {
 
   let cards
 
+  await getColumnCardIssues(columnId)
   try {
     cards = await getCardPage(columnId)
     console.log(JSON.stringify(cards))
