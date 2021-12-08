@@ -182,7 +182,7 @@ async function main () {
 
   const cardsLabeledCount = await labelCards(cards)
 
-  console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.data.length} cards`)
+  console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} cards`)
 }
 
 main().catch((e) => {
