@@ -91,7 +91,7 @@ async function getColumnCardIssues (columnId) {
 
   do {
     cardPage = await getCardPage(columnId, page)
-    console.log(cardPage)
+    cardIssues.push(...cardPage.data)
     page++
   } while (cardPage.data.length === MAX_CARDS_PER_PAGE)
 
@@ -171,9 +171,8 @@ async function main () {
 
   let cards
 
-  await getColumnCardIssues(columnId)
   try {
-    cards = await getCardPage(columnId)
+    cards = await getColumnCardIssues(columnId)
     console.log(JSON.stringify(cards))
   } catch (e) {
     console.error("ERROR: Failed to fetch card data")
