@@ -89,11 +89,11 @@ async function getColumnCardIssues (columnId) {
   let cardPage
   let page = 1
 
-  do
+  do {
     cardPage = await getCardPage(columnId, page)
     console.log(cardPage)
     page++
-  while (cardPage.data.length === MAX_CARDS_PER_PAGE)
+  } while (cardPage.data.length === MAX_CARDS_PER_PAGE)
 
   return cardIssues
 }
