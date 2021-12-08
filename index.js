@@ -180,7 +180,7 @@ async function main () {
     process.exit(1)
   }
 
-  const cardsLabeledCount = await labelCards(cards.data)
+  const cardsLabeledCount = await labelCards(cards)
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.data.length} cards`)
 }
