@@ -89,7 +89,7 @@ async function getColumnCardIssues (columnId) {
   let cardPage
   let page = 1
 
-  while ((cardPage=getCardPage(columnId, page)) === MAX_CARDS_PER_PAGE) {
+  while ((cardPage= await getCardPage(columnId, page)) === MAX_CARDS_PER_PAGE) {
     console.log(cardPage)
     page++
   }
