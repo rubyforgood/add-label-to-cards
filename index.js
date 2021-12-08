@@ -85,17 +85,17 @@ async function getColumnCardIssues (columnId) {
     throw new RangeError('Param columnId cannot be negative')
   }
 
-  console.log("Hi")
-
   let cardIssues = []
   let cardPage
   let page = 1
 
   while ((cardPage = await getCardPage(columnId, page)) === MAX_CARDS_PER_PAGE) {
-    console.log(`page: ${page}`)
     console.log(cardPage)
     page++
   }
+
+  console.log(`page: ${page}`)
+  console.log(cardPage)
 
   return cardIssues
 }
