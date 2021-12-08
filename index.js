@@ -152,7 +152,7 @@ function labelCards(cardData) {
 
     cardData.forEach(async (card) => {
       try {
-        await labelCardIssue(card))
+        await labelCardIssue(card)
         cardsLabeledCount++
       } catch (e) {
         console.warn(`WARNING: Failed to label card with id: ${card.id}`)
