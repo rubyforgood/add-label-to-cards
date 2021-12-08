@@ -7,7 +7,7 @@ const repoOwner = github.context.repo.owner
 const repo = github.context.repo.repo
 const octokit = github.getOctokit(token)
 
-const MAX_CARDS_PER_PAGE = 1
+const MAX_CARDS_PER_PAGE = 1 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
 
 // Determines if an object is an object
 //  @param    {any} variable The variable to check
@@ -91,7 +91,17 @@ async function getColumnCardIssues (columnId) {
 
   do {
     cardPage = await getCardPage(columnId, page)
-    cardIssues.push(...cardPage.data)
+
+    let cardIssues = cardPage.data.filter((card) => {
+      if (!card.content_url) {
+        console.log(`INFO: card with id: ${ card.id } is not an issue`)
+        return false
+      } else {
+        return true
+      }
+    })
+    
+    cardIssues.push(...cardIssues)
     page++
   } while (cardPage.data.length === MAX_CARDS_PER_PAGE)
 
@@ -109,8 +119,7 @@ async function labelCardIssue (card) {
   }
 
   if (!card.content_url) {
-    console.log(`INFO: card with id: ${ card.id } is not an issue`)
-    return false
+    throw new ReferenceError(`Card with id: ${ card.id } is missing field "content_url"`)
   }
 
   const issueNumberMatchCapture = card.content_url.match(/\/issues\/(\d+)$/)
@@ -143,9 +152,8 @@ function labelCards(cardData) {
 
     cardData.forEach(async (card) => {
       try {
-        if (await labelCardIssue(card)) {
-          cardsLabeledCount++
-        }
+        await labelCardIssue(card))
+        cardsLabeledCount++
       } catch (e) {
         console.warn(`WARNING: Failed to label card with id: ${card.id}`)
         console.warn(e.message)
