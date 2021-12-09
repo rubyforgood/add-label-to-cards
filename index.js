@@ -7,6 +7,8 @@ const repoOwner = github.context.repo.owner
 const repo = github.context.repo.repo
 const octokit = github.getOctokit(token)
 
+console.log(github.context.repo)
+
 const MAX_CARDS_PER_PAGE = 1 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
 
 // Determines if an object is an object
@@ -186,7 +188,7 @@ async function main () {
 
   const cardsLabeledCount = await labelCards(cards)
 
-  console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} cards`)
+  console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
 }
 
 main().catch((e) => {
