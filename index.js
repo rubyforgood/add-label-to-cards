@@ -92,8 +92,9 @@ async function getColumnCardIssues (columnId) {
   do {
     cardPage = await getCardPage(columnId, page)
 
+    // filter out non issue cards
     let pageCardIssues = cardPage.data.filter((card) => {
-      return !card.content_url
+      return card.content_url
     })
     
     cardIssues.push(...pageCardIssues)
