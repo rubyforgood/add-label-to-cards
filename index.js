@@ -7,7 +7,7 @@ const repoOwner = github.context.repo.owner
 const repo = github.context.repo.repo
 const octokit = github.getOctokit(token)
 
-console.log(github.context.repo)
+console.log(github.context)
 
 const MAX_CARDS_PER_PAGE = 1 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
 
