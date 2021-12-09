@@ -104,6 +104,13 @@ async function getColumnCardIssues (columnId) {
   return cardIssues
 }
 
+async function getProjects () {
+  return octokit.request('GET /repos/{owner}/{repo}/projects', {
+    owner: owner,
+    repo: repo
+  })
+}
+
 // Adds a label to a card if it is an issue
 //  @param    {object} card An object representing the card to be labeled
 //  @return   {Promise} A promise representing the labeling of the card
@@ -184,6 +191,8 @@ async function main () {
   }
 
   const cardsLabeledCount = await labelCards(cards)
+
+  console.log(await getProjects())
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
 }
