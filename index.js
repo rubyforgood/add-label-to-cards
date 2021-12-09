@@ -3,11 +3,9 @@ const github = require('@actions/github')
 const token = core.getInput('token')
 const labelToAdd = core.getInput('label_to_add')
 const columnId = core.getInput('column_id')
-const repoOwner = github.context.repo.owner
-const repo = github.context.repo.repo
+// Javascript destructuring assignment. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+const {owner, repo} = github.context.repo
 const octokit = github.getOctokit(token)
-
-console.log(github.context)
 
 const MAX_CARDS_PER_PAGE = 1 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
 
@@ -129,7 +127,7 @@ async function labelCardIssue (card) {
   const issueNumber = issueNumberMatchCapture[1]
 
   return octokit.issues.addLabels({
-    owner: repoOwner,
+    owner: owner,
     repo: repo,
     issue_number: issueNumber,
     labels: [labelToAdd]
