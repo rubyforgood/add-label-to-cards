@@ -92,8 +92,7 @@ async function getColumnCardIssues (columnId) {
   do {
     cardPage = await getCardPage(columnId, page)
 
-    let cardIssues = cardPage.data.filter((card) => {
-      console.log(card)
+    let pageCardIssues = cardPage.data.filter((card) => {
       if (!card.content_url) {
         console.log(`INFO: card with id: ${ card.id } is not an issue`)
         return false
@@ -102,7 +101,7 @@ async function getColumnCardIssues (columnId) {
       }
     })
     
-    cardIssues.push(...cardIssues)
+    cardIssues.push(...pageCardIssues)
     page++
   } while (cardPage.data.length === MAX_CARDS_PER_PAGE)
 
