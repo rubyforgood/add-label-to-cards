@@ -179,7 +179,6 @@ async function main () {
 
   try {
     cards = await getColumnCardIssues(columnId)
-    console.log(JSON.stringify(cards))
   } catch (e) {
     console.error("ERROR: Failed to fetch card data")
     console.error(e.message)
