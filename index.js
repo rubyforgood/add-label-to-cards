@@ -93,12 +93,7 @@ async function getColumnCardIssues (columnId) {
     cardPage = await getCardPage(columnId, page)
 
     let pageCardIssues = cardPage.data.filter((card) => {
-      if (!card.content_url) {
-        console.log(`INFO: card with id: ${ card.id } is not an issue`)
-        return false
-      } else {
-        return true
-      }
+      return !card.content_url
     })
     
     cardIssues.push(...pageCardIssues)
