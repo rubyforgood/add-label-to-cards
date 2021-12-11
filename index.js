@@ -1,8 +1,9 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
 const token = core.getInput('token')
-const labelToAdd = core.getInput('label_to_add')
 const columnId = core.getInput('column_id')
+const labelToAdd = core.getInput('label_to_add')
+const project_name = core.getInput('project_name')
 // Javascript destructuring assignment. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
 const {owner, repo} = github.context.repo
 const octokit = github.getOctokit(token)
@@ -104,10 +105,20 @@ async function getColumnCardIssues (columnId) {
   return cardIssues
 }
 
-async function getProjects () {
-  return octokit.request('GET /repos/{owner}/{repo}/projects', {
+// Get the project with name passed into projectName from the current repo
+//  @return   {Promise} A promise representing fetching of the project
+//    @fulfilled {Object} An object representing the first project with name matching projectName
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError}  if projectName is empty string
+//  @throws   {Error} if an error occurs while trying to fetch the project data
+async function getProject () {
+  let repoProjects = await octokit.request('GET /repos/{owner}/{repo}/projects', {
     owner: owner,
     repo: repo
+  })
+
+  return repoProjects.data.find((project) => {
+    project.name === projectName
   })
 }
 

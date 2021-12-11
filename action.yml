@@ -1,16 +1,24 @@
 name: 'Add Label to Cards'
 description: 'Adds the given label to all cards in the given column.'
 inputs:
-  token:
-    description: 'github token'
-    required: true
+  column_id:
+    description: 'The id of the column containing the card issues'
+    required: false
+    default: ''
+  column_name:
+    description: 'The name of the column containing the card issues'
+    required: false
     default: ''
   label_to_add:
-    description: 'Label to add'
+    description: 'The label to add to card issues'
     required: true
     default: ''
-  column_id:
-    description: 'Column id'
+  project_name:
+    description: 'The name of the project containing the cards'
+    required: true
+    default: ''
+  token:
+    description: 'github token'
     required: true
     default: ''
 runs:
