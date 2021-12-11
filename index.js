@@ -3,7 +3,7 @@ const github = require('@actions/github')
 const token = core.getInput('token')
 const columnId = core.getInput('column_id')
 const labelToAdd = core.getInput('label_to_add')
-const project_name = core.getInput('project_name')
+const projectName = core.getInput('project_name')
 // Javascript destructuring assignment. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
 const {owner, repo} = github.context.repo
 const octokit = github.getOctokit(token)
