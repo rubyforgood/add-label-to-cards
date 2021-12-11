@@ -121,7 +121,7 @@ async function getProject () {
   console.log(repoProjects.data)
 
   return repoProjects.data.find((project) => {
-    project.name === projectName
+    return project.name === projectName
   })
 }
 
