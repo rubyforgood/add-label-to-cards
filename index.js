@@ -203,7 +203,7 @@ async function main () {
 
   const cardsLabeledCount = await labelCards(cards)
 
-  console.log(await getProjects())
+  console.log(await getProject())
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
 }
