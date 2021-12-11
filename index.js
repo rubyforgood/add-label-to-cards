@@ -117,6 +117,9 @@ async function getProject () {
     repo: repo
   })
 
+  console.log("repoProjects.data")
+  console.log(repoProjects.data)
+
   return repoProjects.data.find((project) => {
     project.name === projectName
   })
