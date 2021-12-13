@@ -2,6 +2,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const token = core.getInput('token')
 const columnId = core.getInput('column_id')
+const columnName = core.getInput('column_name')
 const labelToAdd = core.getInput('label_to_add')
 const projectName = core.getInput('project_name')
 // Javascript destructuring assignment. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
@@ -64,6 +65,38 @@ async function getCardPage (columnId, pageNumber = 1) {
   })
 }
 
+// Get the column with name passed to columnName
+//  @param    {integer} projectId The id of the project containing the column
+//  @return   {Promise} A promise representing fetching of the column
+//    @fulfilled {Object} An object representing the first column with name matching columnName
+//                        undefined if the column could not be found
+//  @throws   {TypeError}  for a parameter of the incorrect type
+//  @throws   {RangeError}  if projectId is less than 1
+//  @throws   {Error} if an error occurs while trying to fetch the project data
+async function getColumn (projectId) {
+  if (typeof projectId === 'string') {
+    columnId = parseInt(projectId)
+
+    if (!projectId) { // The project id isn't going to be 0
+      throw new TypeError('Param projectId is not an integer')
+    }
+  }
+
+  if (!Number.isInteger(projectId)) {
+    throw new TypeError('Param projectId is not an integer')
+  } else if (projectId < 0) {
+    throw new RangeError('Param projectId cannot be negative')
+  }
+
+  const columnList = await octokit.request('GET /projects/{project_id}/columns', {
+    project_id: projectId
+  })
+
+  return columnList.data.find((column) => {
+    return column.name === columnName
+  })
+}
+
 // Lists all the cards for a column that are issues
 //  @param    {integer} columnId The id of the column containing the cards
 //  @return   {Promise} A promise representing fetching of card data
@@ -108,17 +141,13 @@ async function getColumnCardIssues (columnId) {
 // Get the project with name passed into projectName from the current repo
 //  @return   {Promise} A promise representing fetching of the project
 //    @fulfilled {Object} An object representing the first project with name matching projectName
-//  @throws   {TypeError}  for a parameter of the incorrect type
-//  @throws   {RangeError}  if projectName is empty string
+//                        undefined if the project could not be found
 //  @throws   {Error} if an error occurs while trying to fetch the project data
 async function getProject () {
-  let repoProjects = await octokit.request('GET /repos/{owner}/{repo}/projects', {
+  const repoProjects = await octokit.request('GET /repos/{owner}/{repo}/projects', {
     owner: owner,
     repo: repo
   })
-
-  console.log("repoProjects.data")
-  console.log(repoProjects.data)
 
   return repoProjects.data.find((project) => {
     return project.name === projectName
@@ -186,12 +215,14 @@ function labelCards(cardData) {
 }
 
 async function main () {
-  if (!columnId.length) {
-    throw new ReferenceError(`Missing required arg column_id`)
-  }
-
   if (!labelToAdd.length) {
     throw new ReferenceError(`Missing required arg label_to_add`)
+  }
+
+  if (!columnId.length && projectName.length && columnName.length) {
+    columnId = 0 //Temp
+  } else if (!columnId.length) {
+    throw new ReferenceError(`Missing args required to identify column containing card issues to label`)
   }
 
   let cards
