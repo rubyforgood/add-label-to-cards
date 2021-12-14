@@ -237,7 +237,7 @@ async function main () {
 
   const cardsLabeledCount = await labelCards(cards)
 
-  console.log(await getColumn(await getProject()))
+  console.log(await getColumn((await getProject()).id))
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
 }
