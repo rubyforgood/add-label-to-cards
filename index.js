@@ -220,7 +220,22 @@ async function main () {
   }
 
   if (!columnId.length && projectName.length && columnName.length) {
-    columnId = 0 //Temp
+    let project
+    try {
+      project = await getProject()
+    } catch (e) {
+      console.error(`ERROR: Failed to find project with name ${projectName}`)
+      console.error(e.message)
+      process.exit(1)
+    }
+
+    try {
+      columnId = (await getColumn(project.id)).id
+    } catch (e) {
+      console.error(`ERROR: Failed to find column with name ${columnName}`)
+      console.error(e.message)
+      process.exit(1)
+    }
   } else if (!columnId.length) {
     throw new ReferenceError(`Missing args required to identify column containing card issues to label`)
   }
@@ -236,8 +251,6 @@ async function main () {
   }
 
   const cardsLabeledCount = await labelCards(cards)
-
-  console.log(await getColumn((await getProject()).id))
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
 }
