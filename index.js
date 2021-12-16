@@ -9,7 +9,7 @@ const projectName = core.getInput('project_name')
 const {owner, repo} = github.context.repo
 const octokit = github.getOctokit(token)
 
-const MAX_CARDS_PER_PAGE = 1 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
+const MAX_CARDS_PER_PAGE = 100 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
 
 // Determines if an object is an object
 //  @param    {any} variable The variable to check
@@ -192,25 +192,35 @@ async function labelCardIssue (card) {
 //  @throws   {RangeError} if columnId is negative
 //  @throws   {Error} if an error occurs while trying to fetch the card data
 function labelCards(cardData) {
+  const delayBetweenRequestsMS = cardData.length >= MAX_CARDS_PER_PAGE ? 1000 : 0
+
+  if (delayBetweenRequestsMS) {
+    console.log('INFO: A large number of label issue requests will be sent. Throttling requests.')
+  }
+
   return new Promise((resolve, reject) => {
     let cardLabelAttemptCount = 0
     let cardsLabeledCount = 0
+    let requestSentCount = 0
 
-    cardData.forEach(async (card) => {
-      try {
-        await labelCardIssue(card)
+    const requestEverySecond = setInterval(() => {
+      labelCardIssue(card).then(() => {
         cardsLabeledCount++
-      } catch (e) {
+      }).catch((e) => {
         console.warn(`WARNING: Failed to label card with id: ${card.id}`)
         console.warn(e.message)
-      } finally {
+      })finally(() => {
         cardLabelAttemptCount++
 
         if (cardLabelAttemptCount === cardData.length) {
           resolve(cardsLabeledCount)
         }
+      })
+
+      if (++requestSentCount === cardData.length) {
+        window.clearInterval(requestEverySecond);
       }
-    })
+    }, delayBetweenRequestsMS);
   })
 }
 
