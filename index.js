@@ -9,7 +9,7 @@ const projectName = core.getInput('project_name')
 const {owner, repo} = github.context.repo
 const octokit = github.getOctokit(token)
 
-const MAX_CARDS_PER_PAGE = 100 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
+const MAX_CARDS_PER_PAGE = 1 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
 
 // Determines if an object is an object
 //  @param    {any} variable The variable to check
