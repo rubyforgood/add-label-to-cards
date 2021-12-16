@@ -204,6 +204,8 @@ function labelCards(cardData) {
     let requestSentCount = 0
 
     const requestEverySecond = setInterval(() => {
+      const card = cardData[requestSentCount]
+
       labelCardIssue(card).then(() => {
         cardsLabeledCount++
       }).catch((e) => {
