@@ -209,7 +209,7 @@ function labelCards(cardData) {
       }).catch((e) => {
         console.warn(`WARNING: Failed to label card with id: ${card.id}`)
         console.warn(e.message)
-      })finally(() => {
+      }).finally(() => {
         cardLabelAttemptCount++
 
         if (cardLabelAttemptCount === cardData.length) {
