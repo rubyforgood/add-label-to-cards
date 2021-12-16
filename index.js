@@ -220,7 +220,7 @@ function labelCards(cardData) {
       })
 
       if (++requestSentCount === cardData.length) {
-        window.clearInterval(requestEverySecond);
+        clearInterval(requestEverySecond);
       }
     }, delayBetweenRequestsMS);
   })
