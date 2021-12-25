@@ -1,5 +1,6 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
+const columns_labels = cored.getInput('columns_labels')
 const token = core.getInput('token')
 let columnId = core.getInput('column_id')
 const columnName = core.getInput('column_name')
@@ -227,7 +228,7 @@ function labelCards(cardData) {
 }
 
 async function main () {
-  if (!labelToAdd.length) {
+  /*if (!labelToAdd.length) {
     throw new ReferenceError(`Missing required arg label_to_add`)
   }
 
@@ -264,7 +265,8 @@ async function main () {
 
   const cardsLabeledCount = await labelCards(cards)
 
-  console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
+  console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)*/
+  console.log(columns_labels)
 }
 
 main().catch((e) => {
