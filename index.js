@@ -1,6 +1,6 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
-const columns_labels = cored.getInput('columns_labels')
+const columns_labels = core.getInput('columns_labels')
 const token = core.getInput('token')
 let columnId = core.getInput('column_id')
 const columnName = core.getInput('column_name')
