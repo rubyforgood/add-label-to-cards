@@ -1,6 +1,6 @@
 const core = require('@actions/core')
 const github = require('@actions/github')
-const columns_labels = core.getInput('columns_labels')
+let columns_labels = core.getInput('columns_labels')
 const token = core.getInput('token')
 let columnId = core.getInput('column_id')
 const columnName = core.getInput('column_name')
@@ -224,6 +224,46 @@ function labelCards(cardData) {
         clearInterval(requestInterval);
       }
     }, delayBetweenRequestsMS);
+  })
+}
+
+// Validates the columns_labels user arg
+//  @param    {string} columns_labels_as_string The value of columns_labels passed by the bot user
+//  @return   {array} An array of the valid objects containing column and label data
+//  @throws   {Error}  When the arguments are fatally invalid
+function validateColumnsLabels (columns_labels_as_string) {
+  let columns_labels_as_JSON
+
+  try {
+    columns_labels_as_JSON = JSON.parse(columns_labels_as_string)
+  } catch (e) {
+    console.error('ERROR: Could not parse param columns_labels as JSON')
+    throw e
+  }
+
+  if (!Array.isArray(columns_labels_as_JSON)) {
+    throw new TypeError('ERROR: param columns_labels must be an array')
+  }
+
+  columns_labels_as_JSON = columns_labels_as_JSON.filter((column_labels, index) => {
+    if (!isObject(column_labels)) {
+      console.warn(`WARNING: element at index=${index} of columns_labels is not an object`)
+      console.warn(`  Skipping element at index=${index}`)
+      return false
+    }
+
+    const labels = !('labels' in column_labels) || // Object does not have key "labels"
+      !Array.isArray(column_labels.labels) || // value from key "labels" is not an array
+      !column_labels.labels.length || // "labels" array is empty
+      ? [] : column_labels.labels.filter((label) => { return typeof val === 'string' && val.length })
+
+    console.log(labels)
+
+    if (!labels.length) {
+      console.warn(`WARNING: element at index=${index} of columns_labels does not contain valid labels`)
+      console.warn(`  Skipping element at index=${index}`)
+      return false
+    }
   })
 }
 
