@@ -306,7 +306,7 @@ async function main () {
   const cardsLabeledCount = await labelCards(cards)
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)*/
-  console.log(JSON.parse(columns_labels))
+  console.log(validateColumnsLabels(column_labels))
 }
 
 main().catch((e) => {
