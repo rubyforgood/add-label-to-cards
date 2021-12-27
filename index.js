@@ -307,6 +307,7 @@ async function main () {
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)*/
   console.log(validateColumnsLabels(columns_labels))
+  return
 }
 
 main().catch((e) => {
