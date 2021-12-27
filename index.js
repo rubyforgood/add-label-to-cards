@@ -252,10 +252,10 @@ function validateColumnsLabels (columns_labels_as_string) {
       return false
     }
 
-    const labels = !('labels' in column_labels) || // Object does not have key "labels"
-      !Array.isArray(column_labels.labels) || // value from key "labels" is not an array
-      !column_labels.labels.length // "labels" array is empty
-      ? [] : column_labels.labels.filter((label) => { return typeof val === 'string' && val.length })
+    const labels = !('labels' in column_labels && // Object does not have key "labels"
+      Array.isArray(column_labels.labels) && // value from key "labels" is not an array
+      column_labels.labels.length) // "labels" array is empty
+      ? [] : column_labels.labels.filter((label) => { return typeof label === 'string' && label.length })
 
     console.log(labels)
 
