@@ -245,7 +245,7 @@ function validateColumnsLabels (columns_labels_as_string) {
     throw new TypeError('ERROR: param columns_labels must be an array')
   }
 
-  columns_labels_as_JSON = columns_labels_as_JSON.filter((column_labels, index) => {
+  const valid_columns_labels = columns_labels_as_JSON.filter((column_labels, index) => {
     if (!isObject(column_labels)) {
       console.warn(`WARNING: element at index=${index} of columns_labels is not an object`)
       console.warn(`  Skipping element at index=${index}`)
@@ -255,7 +255,16 @@ function validateColumnsLabels (columns_labels_as_string) {
     const labels = !('labels' in column_labels && // Object does not have key "labels"
       Array.isArray(column_labels.labels) && // value from key "labels" is not an array
       column_labels.labels.length) // "labels" array is empty
-      ? [] : column_labels.labels.filter((label) => { return typeof label === 'string' && label.length })
+      ? [] : column_labels.labels.filter((label) => { 
+        const isValidLabel = typeof label === 'string' && label.length 
+
+        if (!isValidLabel) {
+          console.warn(`WARNING: element at index=${index} of columns_labels contains an invalid label: ${label}`)
+          console.warn(`  Omitting invalid label`)
+        }
+
+        return isValidLabel
+      })
 
     console.log(labels)
 
@@ -265,6 +274,12 @@ function validateColumnsLabels (columns_labels_as_string) {
       return false
     }
   })
+
+  if (!valid_columns_labels.length) {
+    throw new Error('ERROR: Could not find a valid object with a column identifier and a list of labels')
+  }
+
+  return valid_columns_labels
 }
 
 async function main () {
