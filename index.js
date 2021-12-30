@@ -273,6 +273,8 @@ function validateColumnsLabels (columns_labels_as_string) {
       console.warn(`  Skipping element at index=${index}`)
       return false
     }
+
+    return true
   })
 
   if (!valid_columns_labels.length) {
