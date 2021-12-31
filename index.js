@@ -266,7 +266,7 @@ function validateColumnsLabels (columns_labels_as_string) {
         return isValidLabel
       })
 
-    if (filtered_labels.length) {
+    if (!filtered_labels.length) {
       console.warn(`WARNING: element at index=${index} of columns_labels does not contain valid labels`)
       console.warn(`  Skipping element at index=${index}`)
       return false
