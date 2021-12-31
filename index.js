@@ -252,7 +252,7 @@ function validateColumnsLabels (columns_labels_as_string) {
       return false
     }
 
-    const labels = !('labels' in column_labels && // Object does not have key "labels"
+    const filtered_labels = !('labels' in column_labels && // Object does not have key "labels"
       Array.isArray(column_labels.labels) && // value from key "labels" is not an array
       column_labels.labels.length) // "labels" array is empty
       ? [] : column_labels.labels.filter((label) => { 
@@ -266,12 +266,12 @@ function validateColumnsLabels (columns_labels_as_string) {
         return isValidLabel
       })
 
-    console.log(labels)
-
-    if (!labels.length) {
+    if (filtered_labels.length) {
       console.warn(`WARNING: element at index=${index} of columns_labels does not contain valid labels`)
       console.warn(`  Skipping element at index=${index}`)
       return false
+    } else {
+      column_labels.labels = filtered_labels
     }
 
     return true
