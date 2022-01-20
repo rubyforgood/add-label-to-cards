@@ -227,6 +227,33 @@ function labelCards(cardData) {
   })
 }
 
+// Validates a list of lables contains only strings
+//  @param    {number} column_labels_index The index of the column_labels object in the user args (for printing errors)
+//  @param    {array}  labels An array of labels as strings
+//  @return   {array}  An array of the valid labels
+//  @throws   {TypeError}  for a parameter of the incorrect type
+function validateLabels (column_labels_index, labels) {
+  if (!Number.isInteger(column_labels_index)) {
+    throw new TypeError('Param column_labels_index must be an integer')
+  }
+
+  if (!Array.isArray(labels)) {
+    throw new TypeError('Param labels must be an array')
+  }
+
+  return column_labels.labels.filter((label) => {
+    const isValidLabel = typeof label === 'string' && label.length
+
+    if (!isValidLabel) {
+      console.warn(`WARNING: element at index=${index} of columns_labels contains an invalid label: ${label}`)
+      console.warn(`  Labels must be non empty strings`)
+      console.warn(`  Omitting invalid label`)
+    }
+
+    return isValidLabel
+  })
+}
+
 // Validates the columns_labels user arg
 //  @param    {string} columns_labels_as_string The value of columns_labels passed by the bot user
 //  @return   {array} An array of the valid objects containing column and label data
@@ -252,19 +279,13 @@ function validateColumnsLabels (columns_labels_as_string) {
       return false
     }
 
-    const filtered_labels = !('labels' in column_labels && // Object does not have key "labels"
-      Array.isArray(column_labels.labels) && // value from key "labels" is not an array
-      column_labels.labels.length) // "labels" array is empty
-      ? [] : column_labels.labels.filter((label) => { 
-        const isValidLabel = typeof label === 'string' && label.length 
+    if (!('labels' in column_labels)) {
+      console.warn(`WARNING: element at index=${index} of columns_labels is missing key "labels"`)
+      console.warn(`  Skipping element at index=${index}`)
+      return false
+    }
 
-        if (!isValidLabel) {
-          console.warn(`WARNING: element at index=${index} of columns_labels contains an invalid label: ${label}`)
-          console.warn(`  Omitting invalid label`)
-        }
-
-        return isValidLabel
-      })
+    const filtered_labels = validateLabels(index, column_labels['labels'])
 
     if (!filtered_labels.length) {
       console.warn(`WARNING: element at index=${index} of columns_labels does not contain valid labels`)
