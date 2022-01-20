@@ -285,7 +285,7 @@ function validateColumnsLabels (columns_labels_as_string) {
       return false
     }
 
-    const filtered_labels
+    let filtered_labels
 
     try {
       filtered_labels = validateLabels(index, column_labels['labels'])
