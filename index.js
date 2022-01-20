@@ -245,7 +245,7 @@ function validateLabels (column_labels_index, labels) {
     const isValidLabel = typeof label === 'string' && label.length
 
     if (!isValidLabel) {
-      console.warn(`WARNING: element at index=${index} of columns_labels contains an invalid label: ${label}`)
+      console.warn(`WARNING: element at index=${column_labels_index} of columns_labels contains an invalid label: ${label}`)
       console.warn(`  Labels must be non empty strings`)
       console.warn(`  Omitting invalid label`)
     }
