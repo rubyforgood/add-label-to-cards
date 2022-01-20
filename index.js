@@ -241,7 +241,7 @@ function validateLabels (column_labels_index, labels) {
     throw new TypeError('Param labels must be an array')
   }
 
-  return column_labels.labels.filter((label) => {
+  return labels.filter((label) => {
     const isValidLabel = typeof label === 'string' && label.length
 
     if (!isValidLabel) {
