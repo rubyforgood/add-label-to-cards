@@ -285,7 +285,14 @@ function validateColumnsLabels (columns_labels_as_string) {
       return false
     }
 
-    const filtered_labels = validateLabels(index, column_labels['labels'])
+    const filtered_labels
+
+    try {
+      filtered_labels = validateLabels(index, column_labels['labels'])
+    } catch (e) {
+      console.warn(e)
+      filtered_labels = []
+    }
 
     if (!filtered_labels.length) {
       console.warn(`WARNING: element at index=${index} of columns_labels does not contain valid labels`)
