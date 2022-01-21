@@ -307,7 +307,7 @@ function validateColumnsLabels (columns_labels_as_string) {
       validateColumnLabels(column_labels, index)
       return true
     } catch (e) {
-      console.warn(e)
+      console.warn(e.message.split('\n', 1)[0])
       console.warn(`  Skipping element at index=${index}`)
       return false
     }
