@@ -271,7 +271,7 @@ function validateColumnLabels (column_labels, column_labels_index) {
   let filtered_labels
 
   try {
-    filtered_labels = validateLabels(index, column_labels['labels'])
+    filtered_labels = validateLabels(column_labels_index, column_labels['labels'])
   } catch (e) {
     console.warn(e)
     filtered_labels = []
