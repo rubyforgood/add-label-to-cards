@@ -254,6 +254,15 @@ function validateLabels (column_labels_index, labels) {
   })
 }
 
+// Validates an object containing a github column identifyer and a list of labels to add
+//   Removes extra or unusable data from the object
+//  @param    {string}  column_labels The object to be validated
+//  @param    {integer} index The index of the column_labels object in the user args(for error printing)
+//  @return   {boolean} True if the column-labels object is valid
+//  @throws   {Error}   When the column-labels object is fatally invalid
+function validateColumnLabels (column_labels, index) {
+}
+
 // Validates the columns_labels user arg
 //  @param    {string} columns_labels_as_string The value of columns_labels passed by the bot user
 //  @return   {array} An array of the valid objects containing column and label data
