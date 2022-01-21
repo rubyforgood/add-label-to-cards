@@ -259,20 +259,20 @@ function validateLabels (column_labels_index, labels) {
 //  @return   {array} An array of the valid objects containing column and label data
 //  @throws   {Error}  When the arguments are fatally invalid
 function validateColumnsLabels (columns_labels_as_string) {
-  let columns_labels_as_JSON
+  let columns_labels_as_Object
 
   try {
-    columns_labels_as_JSON = JSON.parse(columns_labels_as_string)
+    columns_labels_as_Object = JSON.parse(columns_labels_as_string)
   } catch (e) {
     console.error('ERROR: Could not parse param columns_labels as JSON')
     throw e
   }
 
-  if (!Array.isArray(columns_labels_as_JSON)) {
+  if (!Array.isArray(columns_labels_as_Object)) {
     throw new TypeError('ERROR: param columns_labels must be an array')
   }
 
-  const valid_columns_labels = columns_labels_as_JSON.filter((column_labels, index) => {
+  const valid_columns_labels = columns_labels_as_Object.filter((column_labels, index) => {
     if (!isObject(column_labels)) {
       console.warn(`WARNING: element at index=${index} of columns_labels is not an object`)
       console.warn(`  Skipping element at index=${index}`)
