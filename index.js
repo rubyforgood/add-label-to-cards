@@ -257,10 +257,31 @@ function validateLabels (column_labels_index, labels) {
 // Validates an object containing a github column identifyer and a list of labels to add
 //   Removes extra or unusable data from the object
 //  @param    {string}  column_labels The object to be validated
-//  @param    {integer} index The index of the column_labels object in the user args(for error printing)
-//  @return   {boolean} True if the column-labels object is valid
+//  @param    {integer} column_labels_index The index of the column_labels object in the user args(for error printing)
 //  @throws   {Error}   When the column-labels object is fatally invalid
-function validateColumnLabels (column_labels, index) {
+function validateColumnLabels (column_labels, column_labels_index) {
+  if (!isObject(column_labels)) {
+    throw new TypeError(`WARNING: element at index=${column_labels_index} of columns_labels is not an object`)
+  }
+
+  if (!('labels' in column_labels)) {
+    throw new ReferenceError(`WARNING: element at index=${column_labels_index} of columns_labels is missing key "labels"`)
+  }
+
+  let filtered_labels
+
+  try {
+    filtered_labels = validateLabels(index, column_labels['labels'])
+  } catch (e) {
+    console.warn(e)
+    filtered_labels = []
+  }
+
+  if (!filtered_labels.length) {
+    throw new Error(`WARNING: element at index=${column_labels_index} of columns_labels does not contain valid labels`)
+  }
+
+  column_labels.labels = filtered_labels
 }
 
 // Validates the columns_labels user arg
@@ -282,36 +303,14 @@ function validateColumnsLabels (columns_labels_as_string) {
   }
 
   const valid_columns_labels = columns_labels_as_Object.filter((column_labels, index) => {
-    if (!isObject(column_labels)) {
-      console.warn(`WARNING: element at index=${index} of columns_labels is not an object`)
-      console.warn(`  Skipping element at index=${index}`)
-      return false
-    }
-
-    if (!('labels' in column_labels)) {
-      console.warn(`WARNING: element at index=${index} of columns_labels is missing key "labels"`)
-      console.warn(`  Skipping element at index=${index}`)
-      return false
-    }
-
-    let filtered_labels
-
     try {
-      filtered_labels = validateLabels(index, column_labels['labels'])
+      validateColumnLabels(column_labels, index)
+      return true
     } catch (e) {
       console.warn(e)
-      filtered_labels = []
-    }
-
-    if (!filtered_labels.length) {
-      console.warn(`WARNING: element at index=${index} of columns_labels does not contain valid labels`)
       console.warn(`  Skipping element at index=${index}`)
       return false
-    } else {
-      column_labels.labels = filtered_labels
     }
-
-    return true
   })
 
   if (!valid_columns_labels.length) {
