@@ -273,7 +273,7 @@ function validateColumnLabels (column_labels, column_labels_index) {
   try {
     filtered_labels = validateLabels(column_labels_index, column_labels['labels'])
   } catch (e) {
-    console.warn(e)
+    console.warn(e.message.split('\n', 1)[0])
     filtered_labels = []
   }
 
