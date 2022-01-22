@@ -13,10 +13,17 @@ const octokit = github.getOctokit(token)
 const MAX_CARDS_PER_PAGE = 100 // from https://docs.github.com/en/rest/reference/projects#list-project-cards
 
 // Determines if an object is an object
-//  @param    {any} variable The variable to check
+//  @param    {any} variable The object to check
 //  @returns  {boolean} true if variable is an object, false otherwise
 function isObject (variable) {
   return typeof variable === 'object' && !Array.isArray(variable) && variable !== null
+}
+
+// Determines if an object is a nonempty string
+//  @param    {any} str The object to check
+//  @returns  {boolean} true if str is a nonempty string, false otherwise
+function isNonEmptyString (str) {
+  typeof str === 'string' && str.length
 }
 
 // Lists up to MAX_CARDS_PER_PAGE cards from a column
@@ -242,7 +249,7 @@ function validateLabels (column_labels_index, labels) {
   }
 
   return labels.filter((label) => {
-    const isValidLabel = typeof label === 'string' && label.length
+    const isValidLabel = isNonEmptyString(label)
 
     if (!isValidLabel) {
       console.warn(`WARNING: element at index=${column_labels_index} of columns_labels contains an invalid label: ${label}`)
@@ -268,11 +275,13 @@ function validateColumnLabels (column_labels, column_labels_index) {
     throw new ReferenceError(`WARNING: element at index=${column_labels_index} of columns_labels is missing key "labels"`)
   }
 
-  if ('column_id' in column_labels && ) {
+  if ('column_id' in column_labels && isNonEmptyString(column_labels['column_id'])) {
     delete column_labels['column_name']
     delete column_labels['project_name']
-  } else if () {
+  } else if ('column_name' in column_labels && isNonEmptyString(column_labels['column_name']) && 'project_name' in column_labels && isNonEmptyString(column_labels['project_name'])) {
+    delete column_labels['column_id']
   } else {
+    throw new ReferenceError(`WARNING: element at index=${column_labels_index} of columns_labels does not contain valid identifiers for a github column`)
   }
 
   let filtered_labels
