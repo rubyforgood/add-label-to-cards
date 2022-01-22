@@ -268,6 +268,13 @@ function validateColumnLabels (column_labels, column_labels_index) {
     throw new ReferenceError(`WARNING: element at index=${column_labels_index} of columns_labels is missing key "labels"`)
   }
 
+  if ('column_id' in column_labels && ) {
+    delete column_labels['column_name']
+    delete column_labels['project_name']
+  } else if () {
+  } else {
+  }
+
   let filtered_labels
 
   try {
