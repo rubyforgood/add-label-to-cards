@@ -23,7 +23,7 @@ function isObject (variable) {
 //  @param    {any} str The object to check
 //  @returns  {boolean} true if str is a nonempty string, false otherwise
 function isNonEmptyString (str) {
-  typeof str === 'string' && str.length
+  return typeof str === 'string' && str.length
 }
 
 // Lists up to MAX_CARDS_PER_PAGE cards from a column
@@ -274,8 +274,6 @@ function validateColumnLabels (column_labels, column_labels_index) {
   if (!('labels' in column_labels)) {
     throw new ReferenceError(`WARNING: element at index=${column_labels_index} of columns_labels is missing key "labels"`)
   }
-
-  console.log('#################################' + isNonEmptyString(column_labels['column_name']))
 
   if ('column_id' in column_labels && isNonEmptyString(column_labels['column_id'])) {
     delete column_labels['column_name']
