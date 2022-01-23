@@ -2,10 +2,6 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 let columns_labels = core.getInput('columns_labels')
 const token = core.getInput('token')
-let columnId = core.getInput('column_id')
-const columnName = core.getInput('column_name')
-const labelToAdd = core.getInput('label_to_add')
-const projectName = core.getInput('project_name')
 // Javascript destructuring assignment. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
 const {owner, repo} = github.context.repo
 const octokit = github.getOctokit(token)
@@ -337,9 +333,7 @@ function validateColumnsLabels (columns_labels_as_string) {
 }
 
 async function main () {
-  /*if (!labelToAdd.length) {
-    throw new ReferenceError(`Missing required arg label_to_add`)
-  }
+ const valid_columns_labels = validateColumnsLabels(columns_labels)
 
   if (!columnId.length && projectName.length && columnName.length) {
     let project
@@ -375,7 +369,6 @@ async function main () {
   const cardsLabeledCount = await labelCards(cards)
 
   console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)*/
-  console.log(validateColumnsLabels(columns_labels))
   return
 }
 
