@@ -335,7 +335,7 @@ function validateColumnsLabels (columns_labels_as_string) {
 async function main () {
  const valid_columns_labels = validateColumnsLabels(columns_labels)
 
-  if (!columnId.length && projectName.length && columnName.length) {
+ /*if (!columnId.length && projectName.length && columnName.length) {
     let project
     try {
       project = await getProject()
