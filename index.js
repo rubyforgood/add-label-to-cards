@@ -275,10 +275,12 @@ function validateColumnLabels (column_labels, column_labels_index) {
     throw new ReferenceError(`WARNING: element at index=${column_labels_index} of columns_labels is missing key "labels"`)
   }
 
+  console.log('#################################' + isNonEmptyString(column_labels['column_name']))
+
   if ('column_id' in column_labels && isNonEmptyString(column_labels['column_id'])) {
     delete column_labels['column_name']
     delete column_labels['project_name']
-  } else if ('column_name' in column_labels && isNonEmptyString(column_labels['column_name']) && 'project_name' in column_labels && isNonEmptyString(column_labels['project_name'])) {
+  } else if (('column_name' in column_labels) && isNonEmptyString(column_labels['column_name']) && ('project_name' in column_labels) && isNonEmptyString(column_labels['project_name'])) {
     delete column_labels['column_id']
   } else {
     throw new ReferenceError(`WARNING: element at index=${column_labels_index} of columns_labels does not contain valid identifiers for a github column`)
