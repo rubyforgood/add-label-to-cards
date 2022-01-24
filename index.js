@@ -143,11 +143,17 @@ async function getColumnCardIssues (columnId) {
 }
 
 // Get the project with name passed into projectName from the current repo
+//  @param    {string} projectName The name of the project
 //  @return   {Promise} A promise representing fetching of the project
 //    @fulfilled {Object} An object representing the first project with name matching projectName
 //                        undefined if the project could not be found
-//  @throws   {Error} if an error occurs while trying to fetch the project data
-async function getProject () {
+//  @throws   {TypeError} for a parameter of the incorrect type
+//  @throws   {Error}     if an error occurs while trying to fetch the project data
+async function getProject (projectName) {
+  if (!isNonEmptyString(projectName)) {
+    throw new TypeError('Param projectName must be a non empty string')
+  }
+
   const repoProjects = await octokit.request('GET /repos/{owner}/{repo}/projects', {
     owner: owner,
     repo: repo
@@ -352,8 +358,6 @@ async function main () {
       console.error(e.message)
       process.exit(1)
     }
-  } else if (!columnId.length) {
-    throw new ReferenceError(`Missing args required to identify column containing card issues to label`)
   }
 
   let cards
