@@ -339,17 +339,25 @@ function validateColumnsLabels (columns_labels_as_string) {
 }
 
 async function main () {
- const valid_columns_labels = validateColumnsLabels(columns_labels)
+  const validColumnsLabels = validateColumnsLabels(columns_labels)
+
+  validColumnsLabels.forEach((column_labels) => {
+    if (column_labels['column_id']) {
+    } else {
+      try {
+        project = await getProject(column_labels['project_name'])
+        console.log(project)
+      } catch (e) {
+        console.error(`ERROR: Failed to find project with name ${projectName}`)
+        console.error(e.message)
+
+        return
+      }
+    }
+  })
 
  /*if (!columnId.length && projectName.length && columnName.length) {
     let project
-    try {
-      project = await getProject()
-    } catch (e) {
-      console.error(`ERROR: Failed to find project with name ${projectName}`)
-      console.error(e.message)
-      process.exit(1)
-    }
 
     try {
       columnId = (await getColumn(project.id)).id
