@@ -354,7 +354,7 @@ async function main () {
         return
       }
     }
-  })
+  }
 
  /*if (!columnId.length && projectName.length && columnName.length) {
     let project
