@@ -341,7 +341,7 @@ function validateColumnsLabels (columns_labels_as_string) {
 async function main () {
   const validColumnsLabels = validateColumnsLabels(columns_labels)
 
-  for (const column_label of validColumnsLabels) {
+  for (const column_labels of validColumnsLabels) {
     if (column_labels['column_id']) {
     } else {
       try {
