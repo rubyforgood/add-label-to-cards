@@ -69,15 +69,16 @@ async function getCardPage (columnId, pageNumber = 1) {
   })
 }
 
-// Get the column with name passed to columnName
-//  @param    {integer} projectId The id of the project containing the column
+// Get a column by name in a project
+//  @param    {columnName} columnName The name of the column
+//  @param    {integer}    projectId The id of the project containing the column
 //  @return   {Promise} A promise representing fetching of the column
 //    @fulfilled {Object} An object representing the first column with name matching columnName
 //                        undefined if the column could not be found
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {RangeError}  if projectId is less than 1
 //  @throws   {Error} if an error occurs while trying to fetch the project data
-async function getColumn (projectId) {
+async function getColumn (columnName, projectId) {
   if (typeof projectId === 'string') {
     columnId = parseInt(projectId)
 
@@ -344,11 +345,22 @@ async function main () {
   for (const column_labels of validColumnsLabels) {
     if (column_labels['column_id']) {
     } else {
+      let project
+
       try {
         project = await getProject(column_labels['project_name'])
-        console.log(project)
       } catch (e) {
         console.error(`ERROR: Failed to find project with name ${projectName}`)
+        console.error(e.message)
+
+        return
+      }
+
+      try {
+        columnId = (await getColumn(column_labels['column_name'], project.id)).id
+        console.log(columnId)
+      } catch (e) {
+        console.error(`ERROR: Failed to find column with name ${columnName}`)
         console.error(e.message)
 
         return
@@ -356,19 +368,7 @@ async function main () {
     }
   }
 
- /*if (!columnId.length && projectName.length && columnName.length) {
-    let project
-
-    try {
-      columnId = (await getColumn(project.id)).id
-    } catch (e) {
-      console.error(`ERROR: Failed to find column with name ${columnName}`)
-      console.error(e.message)
-      process.exit(1)
-    }
-  }
-
-  let cards
+  /*let cards
 
   try {
     cards = await getColumnCardIssues(columnId)
