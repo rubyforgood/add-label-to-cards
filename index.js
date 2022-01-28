@@ -196,7 +196,7 @@ async function labelCardIssue (card, labels) {
     owner: owner,
     repo: repo,
     issue_number: issueNumber,
-    labels: [labels]
+    labels: labels
   })
 }
 
