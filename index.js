@@ -355,7 +355,9 @@ async function main () {
   const validColumnsLabels = validateColumnsLabels(columns_labels)
 
   for (const column_labels of validColumnsLabels) {
-    columnId = column_labels['column_id']
+    let columnId = column_labels['column_id']
+
+    console.log(`Labeling a column with the following column label data: ${ JSON.stringify(column_labels) }`)
 
     if (!columnId) {
       let project
