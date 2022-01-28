@@ -166,13 +166,18 @@ async function getProject (projectName) {
 }
 
 // Adds a label to a card if it is an issue
-//  @param    {object} card An object representing the card to be labeled
+//  @param    {object} card   An object representing the card to be labeled
+//  @param    {Array}  labels The list of labels to be added
 //  @return   {Promise} A promise representing the labeling of the card
 //  @throws   {TypeError}  for a parameter of the incorrect type
 //  @throws   {Error} if an error occurs while labeling the card
-async function labelCardIssue (card) {
+async function labelCardIssue (card, labels) {
   if (!isObject(card)) {
     throw new TypeError('Param card is not an object')
+  }
+
+  if (!Array.isArray(labels)) {
+    reject(new TypeError('Param labels must be an array'))
   }
 
   if (!card.content_url) {
@@ -191,18 +196,17 @@ async function labelCardIssue (card) {
     owner: owner,
     repo: repo,
     issue_number: issueNumber,
-    labels: [labelToAdd]
+    labels: [labels]
   })
 }
 
 // Adds a github labeld to each card of a list
 //  @param    {Array} cardData The list of cards to be labeled
+//  @param    {Array} labels   The list of labels to be added
 //  @return   {Promise} A promise representing labeling the list of cards
 //    @fulfilled {integer} The number of cards successfully labeled
-//  @throws   {TypeError}  for a parameter of the incorrect type
-//  @throws   {RangeError} if columnId is negative
-//  @throws   {Error} if an error occurs while trying to fetch the card data
-function labelCards(cardData) {
+//    @rejected  {TypeError}  for a parameter of the incorrect type
+function labelCards(cardData, labels) {
   const delayBetweenRequestsMS = cardData.length >= MAX_CARDS_PER_PAGE ? 1000 : 0
 
   if (delayBetweenRequestsMS) {
@@ -210,6 +214,14 @@ function labelCards(cardData) {
   }
 
   return new Promise((resolve, reject) => {
+    if (!Array.isArray(cardData)) {
+      reject(new TypeError('Param cardData must be an array'))
+    }
+
+    if (!Array.isArray(labels)) {
+      reject(new TypeError('Param labels must be an array'))
+    }
+
     let cardLabelAttemptCount = 0
     let cardsLabeledCount = 0
     let requestSentCount = 0
@@ -217,7 +229,7 @@ function labelCards(cardData) {
     const requestInterval = setInterval(() => {
       const card = cardData[requestSentCount]
 
-      labelCardIssue(card).then(() => {
+      labelCardIssue(card, labels).then(() => {
         cardsLabeledCount++
       }).catch((e) => {
         console.warn(`WARNING: Failed to label card with id: ${card.id}`)
@@ -343,14 +355,15 @@ async function main () {
   const validColumnsLabels = validateColumnsLabels(columns_labels)
 
   for (const column_labels of validColumnsLabels) {
-    if (column_labels['column_id']) {
-    } else {
+    columnId = column_labels['column_id']
+
+    if (!columnId) {
       let project
 
       try {
         project = await getProject(column_labels['project_name'])
       } catch (e) {
-        console.error(`ERROR: Failed to find project with name ${projectName}`)
+        console.error(`ERROR: Failed to find project with name ${column_labels['project_name']}`)
         console.error(e.message)
 
         return
@@ -358,29 +371,30 @@ async function main () {
 
       try {
         columnId = (await getColumn(column_labels['column_name'], project.id)).id
-        console.log(columnId)
       } catch (e) {
-        console.error(`ERROR: Failed to find column with name ${columnName}`)
+        console.error(`ERROR: Failed to find column with name ${column_labels['column_name']}`)
         console.error(e.message)
 
         return
       }
     }
+
+    let cards
+
+    try {
+      cards = await getColumnCardIssues(columnId)
+    } catch (e) {
+      console.error("ERROR: Failed to fetch card data")
+      console.error(e.message)
+
+      return
+    }
+
+    const cardsLabeledCount = await labelCards(cards)
+
+    console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
   }
 
-  /*let cards
-
-  try {
-    cards = await getColumnCardIssues(columnId)
-  } catch (e) {
-    console.error("ERROR: Failed to fetch card data")
-    console.error(e.message)
-    process.exit(1)
-  }
-
-  const cardsLabeledCount = await labelCards(cards)
-
-  console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)*/
   return
 }
 
