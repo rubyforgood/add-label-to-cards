@@ -390,7 +390,7 @@ async function main () {
       return
     }
 
-    const cardsLabeledCount = await labelCards(cards)
+    const cardsLabeledCount = await labelCards(cards, column_labels['labels'])
 
     console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
   }
