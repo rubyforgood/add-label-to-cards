@@ -366,6 +366,7 @@ async function main () {
         project = await getProject(column_labels['project_name'])
       } catch (e) {
         console.error(`ERROR: Failed to find project with name ${column_labels['project_name']}`)
+        console.error('  Skipping labeling using the above data')
         console.error(e.message)
 
         return
@@ -375,6 +376,7 @@ async function main () {
         columnId = (await getColumn(column_labels['column_name'], project.id)).id
       } catch (e) {
         console.error(`ERROR: Failed to find column with name ${column_labels['column_name']}`)
+        console.error('  Skipping labeling using the above data')
         console.error(e.message)
 
         return
@@ -386,7 +388,8 @@ async function main () {
     try {
       cards = await getColumnCardIssues(columnId)
     } catch (e) {
-      console.error("ERROR: Failed to fetch card data")
+      console.error('ERROR: Failed to fetch card data')
+      console.error('  Skipping labeling using the above data')
       console.error(e.message)
 
       return
