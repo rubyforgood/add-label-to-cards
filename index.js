@@ -369,7 +369,7 @@ async function main () {
         console.error('  Skipping labeling using the above data')
         console.error(e.message)
 
-        return
+        continue
       }
 
       try {
@@ -379,7 +379,7 @@ async function main () {
         console.error('  Skipping labeling using the above data')
         console.error(e.message)
 
-        return
+        continue
       }
     }
 
@@ -392,7 +392,7 @@ async function main () {
       console.error('  Skipping labeling using the above data')
       console.error(e.message)
 
-      return
+      continue
     }
 
     const cardsLabeledCount = await labelCards(cards, column_labels['labels'])
