@@ -389,6 +389,8 @@ async function main () {
 
     try {
       cards = await getColumnCardIssues(columnId)
+      console.log('\n\nCARDS')
+      console.log(cards)
     } catch (e) {
       console.error('ERROR: Failed to fetch card data')
       console.error('  Skipping labeling using the above data')
