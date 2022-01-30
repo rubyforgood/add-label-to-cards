@@ -220,6 +220,8 @@ function labelCards(cardData, labels) {
 
     if (!Array.isArray(labels)) {
       reject(new TypeError('Param labels must be an array'))
+    } else if (!(labels.length)) {
+      resolve(0)
     }
 
     let cardLabelAttemptCount = 0
