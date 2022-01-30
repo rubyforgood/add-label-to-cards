@@ -220,34 +220,36 @@ function labelCards(cardData, labels) {
 
     if (!Array.isArray(labels)) {
       reject(new TypeError('Param labels must be an array'))
-    } else if (!(labels.length)) {
-      resolve(0)
     }
 
-    let cardLabelAttemptCount = 0
-    let cardsLabeledCount = 0
-    let requestSentCount = 0
+    if (!(labels.length)) {
+      resolve(0)
+    } else {
+      let cardLabelAttemptCount = 0
+      let cardsLabeledCount = 0
+      let requestSentCount = 0
 
-    const requestInterval = setInterval(() => {
-      const card = cardData[requestSentCount]
+      const requestInterval = setInterval(() => {
+        const card = cardData[requestSentCount]
 
-      labelCardIssue(card, labels).then(() => {
-        cardsLabeledCount++
-      }).catch((e) => {
-        console.warn(`WARNING: Failed to label card with id: ${card.id}`)
-        console.warn(e.message)
-      }).finally(() => {
-        cardLabelAttemptCount++
+        labelCardIssue(card, labels).then(() => {
+          cardsLabeledCount++
+        }).catch((e) => {
+          console.warn(`WARNING: Failed to label card with id: ${card.id}`)
+          console.warn(e.message)
+        }).finally(() => {
+          cardLabelAttemptCount++
 
-        if (cardLabelAttemptCount === cardData.length) {
-          resolve(cardsLabeledCount)
+          if (cardLabelAttemptCount === cardData.length) {
+            resolve(cardsLabeledCount)
+          }
+        })
+
+        if (++requestSentCount === cardData.length) {
+          clearInterval(requestInterval)
         }
-      })
-
-      if (++requestSentCount === cardData.length) {
-        clearInterval(requestInterval);
-      }
-    }, delayBetweenRequestsMS);
+      }, delayBetweenRequestsMS)
+    }
   })
 }
 
@@ -389,8 +391,6 @@ async function main () {
 
     try {
       cards = await getColumnCardIssues(columnId)
-      console.log('\n\nCARDS')
-      console.log(cards)
     } catch (e) {
       console.error('ERROR: Failed to fetch card data')
       console.error('  Skipping labeling using the above data')
