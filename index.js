@@ -235,6 +235,8 @@ function labelCards(cardData, labels) {
         labelCardIssue(card, labels).then(() => {
           cardsLabeledCount++
         }).catch((e) => {
+          console.log("\n\nBAAAAAAAAAAAD CARD")
+          console.log(card)
           console.warn(`WARNING: Failed to label card with id: ${card.id}`)
           console.warn(e.message)
         }).finally(() => {
