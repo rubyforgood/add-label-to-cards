@@ -218,42 +218,40 @@ function labelCards(cardData, labels) {
       reject(new TypeError('Param cardData must be an array'))
     }
 
+    if (!(cardData.length)) {
+      resolve(0)
+    }
+
     if (!Array.isArray(labels)) {
       reject(new TypeError('Param labels must be an array'))
     }
 
-    if (!(labels.length)) {
-      console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-      resolve(0)
-    } else {
-      console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
-      let cardLabelAttemptCount = 0
-      let cardsLabeledCount = 0
-      let requestSentCount = 0
+    let cardLabelAttemptCount = 0
+    let cardsLabeledCount = 0
+    let requestSentCount = 0
 
-      const requestInterval = setInterval(() => {
-        const card = cardData[requestSentCount]
+    const requestInterval = setInterval(() => {
+      const card = cardData[requestSentCount]
 
-        labelCardIssue(card, labels).then(() => {
-          cardsLabeledCount++
-        }).catch((e) => {
-          console.log("\n\nBAAAAAAAAAAAD CARD")
-          console.log(card)
-          console.warn(`WARNING: Failed to label card with id: ${card.id}`)
-          console.warn(e.message)
-        }).finally(() => {
-          cardLabelAttemptCount++
+      labelCardIssue(card, labels).then(() => {
+        cardsLabeledCount++
+      }).catch((e) => {
+        console.log("\n\nBAAAAAAAAAAAD CARD")
+        console.log(card)
+        console.warn(`WARNING: Failed to label card with id: ${card.id}`)
+        console.warn(e.message)
+      }).finally(() => {
+        cardLabelAttemptCount++
 
-          if (cardLabelAttemptCount === cardData.length) {
-            resolve(cardsLabeledCount)
-          }
-        })
-
-        if (++requestSentCount === cardData.length) {
-          clearInterval(requestInterval)
+        if (cardLabelAttemptCount === cardData.length) {
+          resolve(cardsLabeledCount)
         }
-      }, delayBetweenRequestsMS)
-    }
+      })
+
+      if (++requestSentCount === cardData.length) {
+        clearInterval(requestInterval)
+      }
+    }, delayBetweenRequestsMS)
   })
 }
 
