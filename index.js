@@ -223,8 +223,10 @@ function labelCards(cardData, labels) {
     }
 
     if (!(labels.length)) {
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
       resolve(0)
     } else {
+      console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
       let cardLabelAttemptCount = 0
       let cardsLabeledCount = 0
       let requestSentCount = 0
