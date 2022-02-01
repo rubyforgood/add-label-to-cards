@@ -372,7 +372,7 @@ async function main () {
       try {
         project = await getProject(column_labels['project_name'])
       } catch (e) {
-        console.error(`ERROR: Failed to find project with name ${column_labels['project_name']}`)
+        console.error(`ERROR: Failed to find project with name "${column_labels['project_name']}"`)
         console.error('  Skipping labeling using the above data')
         console.error(e.message)
 
