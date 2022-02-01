@@ -248,7 +248,7 @@ function labelCards(cardData, labels) {
         }
       })
 
-      if (++requestSentCount === cardData.length) {
+      if (++requestSentCount >= cardData.length) {
         clearInterval(requestInterval)
       }
     }, delayBetweenRequestsMS)
