@@ -383,6 +383,10 @@ async function main () {
 
       try {
         columnId = (await getColumn(column_labels['column_name'], project.id)).id
+
+        if (!columnId) {
+          throw new Error('')
+        }
       } catch (e) {
         console.error(`ERROR: Failed to find column with name ${column_labels['column_name']}`)
         console.error('  Skipping labeling using the above data')
