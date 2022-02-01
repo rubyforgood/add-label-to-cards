@@ -216,14 +216,17 @@ function labelCards(cardData, labels) {
   return new Promise((resolve, reject) => {
     if (!Array.isArray(cardData)) {
       reject(new TypeError('Param cardData must be an array'))
+      return
     }
 
     if (!(cardData.length)) {
       resolve(0)
+      return
     }
 
     if (!Array.isArray(labels)) {
       reject(new TypeError('Param labels must be an array'))
+      return
     }
 
     let cardLabelAttemptCount = 0
