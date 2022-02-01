@@ -375,10 +375,13 @@ async function main () {
         console.error(`ERROR: Failed to find project with name ${column_labels['project_name']}`)
         console.error('  Skipping labeling using the above data')
         console.error(e.message)
+
+        continue
       }
 
       try {
-        columnId = (await getColumn(column_labels['column_name'], project.id)).id
+        const column = await getColumn(column_labels['column_name'], project.id)
+        columnId = column ? column.id : null
 
         if (!columnId) {
           throw new Error('')
@@ -387,26 +390,26 @@ async function main () {
         console.error(`ERROR: Failed to find column with name ${column_labels['column_name']}`)
         console.error('  Skipping labeling using the above data')
         console.error(e.message)
-      }
-    }
-
-    if (columnId) {
-      let cards
-
-      try {
-        cards = await getColumnCardIssues(columnId)
-      } catch (e) {
-        console.error('ERROR: Failed to fetch card data')
-        console.error('  Skipping labeling using the above data')
-        console.error(e.message)
 
         continue
       }
-
-      const cardsLabeledCount = await labelCards(cards, column_labels['labels'])
-
-      console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
     }
+
+    let cards
+
+    try {
+      cards = await getColumnCardIssues(columnId)
+    } catch (e) {
+      console.error('ERROR: Failed to fetch card data')
+      console.error('  Skipping labeling using the above data')
+      console.error(e.message)
+
+      continue
+    }
+
+    const cardsLabeledCount = await labelCards(cards, column_labels['labels'])
+
+    console.log(`Labeled/relabeled ${cardsLabeledCount} of ${cards.length} card issues`)
   }
 
   return
