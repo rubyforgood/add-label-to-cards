@@ -138,7 +138,7 @@ async function getColumnCardIssues (columnId) {
     
     cardIssues.push(...pageCardIssues)
     page++
-  } while (cardPage.data.length === MAX_CARDS_PER_PAGE)
+  } while (cardPage.data.length >= MAX_CARDS_PER_PAGE)
 
   return cardIssues
 }
@@ -244,7 +244,7 @@ function labelCards(cardData, labels) {
       }).finally(() => {
         cardLabelAttemptCount++
 
-        if (cardLabelAttemptCount === cardData.length) {
+        if (cardLabelAttemptCount >= cardData.length) {
           resolve(cardsLabeledCount)
         }
       })
