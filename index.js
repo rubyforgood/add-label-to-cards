@@ -200,7 +200,7 @@ async function labelCardIssue (card, labels) {
   })
 }
 
-// Adds a github labeld to each card of a list
+// Adds a github labels to each card of a list
 //  @param    {Array} cardData The list of cards to be labeled
 //  @param    {Array} labels   The list of labels to be added
 //  @return   {Promise} A promise representing labeling the list of cards
