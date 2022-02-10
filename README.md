@@ -1,6 +1,6 @@
 # Add Label to Cards
 
-Adds a label to all cards in a column of a project.
+Adds a label to all card issues in a column of a project.
 
 ## Parameters
 ### columns_labels:  
