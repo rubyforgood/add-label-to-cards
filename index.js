@@ -70,7 +70,7 @@ async function getCardPage (columnId, pageNumber = 1) {
 }
 
 // Get a column by name in a project
-//  @param    {columnName} columnName The name of the column
+//  @param    {string} columnName The name of the column
 //  @param    {integer}    projectId The id of the project containing the column
 //  @return   {Promise} A promise representing fetching of the column
 //    @fulfilled {Object} An object representing the first column with name matching columnName
